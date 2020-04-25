@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+import java.util.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -26,6 +26,9 @@ public class NewServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -37,9 +40,30 @@ public class NewServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Witamy " + request.getParameter("imie") + " !!!</h1>");
+            out.println("<h2>Podales liczby :</h2>");
+            String liczby = request.getParameter("liczby");
+            Double[] liczbyArr = rozdzielLiczby(liczby, out);
+            for (double liczba : liczbyArr) {
+                out.println("<h3>"+liczba+"</h3>");
+            }
             out.println("</body>");
             out.println("</html>");
         }
+    }
+    
+    protected Double[] rozdzielLiczby(String liczbyStr, PrintWriter out) {
+        String[] liczbyArrStr = liczbyStr.trim().split(" ");
+        ArrayList<Double> liczbyLstArrDbl = new ArrayList<>();
+        int i=0;
+        for (String liczba : liczbyArrStr) {
+            try {
+                liczbyLstArrDbl.add(new Double(liczba));
+            } catch(NumberFormatException e) {
+                out.println("<h3>Wprowadzono bledna dane: "+liczba+" !!!</h3>");
+            }
+        }
+        Double[] liczbyArrDbl = (Double[])liczbyLstArrDbl.toArray(new Double[liczbyLstArrDbl.size()]);
+        return liczbyArrDbl;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
